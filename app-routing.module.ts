@@ -1,12 +1,17 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {HomepageComponent} from './homepage/homepage.component';
 import {EditorComponent} from './editor/editor.component';
+import {DevstuffComponent} from './devstuff/devstuff.component';
+import {GettingStartedComponent} from './getting-started/getting-started.component';
+import {StatisticshelpComponent} from './help/statisticshelp/statisticshelp.component';
 
 const routes: Routes = [
-  { path: '', component: HomepageComponent },
-  { path: 'editor', component: EditorComponent}
+  {path: '', component: HomepageComponent},
+  {path: 'editor', component: EditorComponent},
+  {path: 'dev-stuff', component: DevstuffComponent},
+  {path: 'getstarted', component: GettingStartedComponent},
+  {path: 'help/stats', component: StatisticshelpComponent}
 ];
 
 @NgModule({
