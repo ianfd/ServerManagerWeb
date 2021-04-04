@@ -11,6 +11,13 @@ import {DevstuffComponent} from './devstuff/devstuff.component';
 import {GettingStartedComponent} from './getting-started/getting-started.component';
 import {ChartsModule} from 'ng2-charts';
 import {StatisticshelpComponent} from './help/statisticshelp/statisticshelp.component';
+import {HelpComponent} from './help/help.component';
+import {FeatureListComponent} from './feature-list/feature-list.component';
+import {HttpClientModule} from '@angular/common/http';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -21,12 +28,19 @@ import {StatisticshelpComponent} from './help/statisticshelp/statisticshelp.comp
     EditorComponent,
     DevstuffComponent,
     GettingStartedComponent,
-    StatisticshelpComponent
+    StatisticshelpComponent,
+    HelpComponent,
+    FeatureListComponent
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
-    ChartsModule
+    ChartsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

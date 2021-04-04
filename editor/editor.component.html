@@ -1,1 +1,526 @@
-<p>editor works!</p>
+<body style="background: #1B1C1D; padding-top: 70px; padding-bottom: 50px">
+<div class="ui container fluid" style="padding-bottom: 50px">
+  <div class="ui fluid centered grid" style="padding-top: 20px">
+    <div class="row">
+      <div class="sixteen wide column center aligned" style="text-align: center">
+        <h1 style="color: #fff">Web Editor</h1>
+      </div>
+    </div>
+    <div class="spaced"></div>
+    <!-- loadingscreen  -->
+    <div class="row" *ngIf="showLoading">
+      <div class="fourteen wide column centered">
+        <div class="ui active dimmer">
+          <div class="ui indeterminate text loader">Preparing Files</div>
+        </div>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="haveNoParams">
+      <div class="five wide column centered" style="background-color: #4d4d4d; border-radius: 10px; padding: 5px">
+        <p style="color: white; font-size: x-large">Welcome to the WebEditor!</p>
+        <p style="color: white;">Hey, you're trying to access the WebEditor of the ServerManager. To do that to have to issue access from the ServerManager plugin.
+          <br>That works via the command: <code>/sm webeditor</code>, it generates a link for you to access this service.</p>
+        <p style="color: white"><br>If you already have your key and secret, but the link isn't working, you can enter those credentials manually.</p>
+      </div>
+    </div>
+    <div class="row" *ngIf="haveNoParams">
+      <div class="five wide column centered" style="background-color: #4d4d4d; border-radius: 10px; padding: 5px">
+        <br>
+        <p style="font-size: large; color: white">Enter your credentials manually:</p>
+        <div class="ui negative message" *ngIf="showError">
+          <i class="close icon" (click)="hideError()"></i>
+          <div class="header">
+            {{this.errorTitle}}
+          </div>
+          <p>{{this.errorText}}
+          </p></div>
+        <br>
+        <div class="ui">
+          <form class="ui form">
+            <div class="ui fluid grid centered">
+              <div class="row">
+                <div class="eleven wide column centered">
+                  <div class="field">
+                    <label style="color: white; text-align: left"><h4>Key:</h4></label>
+                    <input type="text" name="key" placeholder="Put your key here" [(ngModel)]="key" required>
+                  </div>
+                  <div class="field">
+                    <label style="color: white; text-align: left"><h4>Secret:</h4></label>
+                    <input type="password" name="secret" placeholder="Secret" [(ngModel)]="secret" required>
+                  </div>
+                  <button class="ui button " (click)="enterManually()">
+                    Get started
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+        <br>
+        <p style="color: white">To get more information about the WebEditor, see the tutorial: <a class="link-footer">URL TBA</a></p>
+
+      </div>
+    </div>
+
+    <!-- SHOW SAVE BUTTON -->
+    <div class="row" *ngIf="showEditor">
+      <div class="seven wide column center aligned" style="background-color: #2d2d2d; border-radius: 5px">
+        <div class="ui fluid internally celled grid centered">
+          <div class="row">
+            <div class="fourteen wide column">
+              <p style="color: white; text-align: center" *ngIf="lastSaveTime != null">Save the edit to yyour ServerManager instance.<br>
+                Execute this command on your bungecord server:<br>
+                <code>/sm websave {{key}} {{secret}}</code></p>
+              <p style="color: white; text-align: center" *ngIf="lastSaveTime == null">You haven't saved your edit yet.<br>Save your edit to transfer it to your server.</p>
+            </div>
+            <div class="two wide column center aligned">
+              <div class="ui vertical animated button" tabindex="0" (click)="saveConfigEdit()">
+                <div class="hidden content">Save</div>
+                <div class="visible content">
+                  <i class="save icon"></i>
+                </div>
+              </div>
+              <p style="color: white; font-size: small" *ngIf="lastSaveTime != null">{{lastSaveTime | date: 'hh:mm:ss a'}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE FOR THE EDITOR -->
+    <div class="row" *ngIf="showEditor">
+      <div class="fourteen wide column centered" style="background-color: #2d2d2d; border-radius: 10px; padding-bottom: 10px">
+        <div class="ui fluid centered grid">
+          <div class="spacer"></div>
+          <div class="row">
+            <!-- row with general information MOTD and playercount-->
+            <div class="six wide column centered" style="background: red; padding-bottom: 5px">
+              <div class="ui fluid centered grid">
+                <div class="row">
+                  <div class="ten wide column centered" style="background: #3d3d3d; border-radius: 5px; padding-bottom: 10px">
+                    <h1 style="text-align: center; color: white">General settings</h1>
+                    <br>
+                    <div class="ui negative message" *ngIf="showError">
+                      <i class="close icon" (click)="hideValuesError()"></i>
+                      <div class="header">
+                        {{this.errorTitle}}
+                      </div>
+                      <p>{{this.errorText}}
+                      </p></div>
+                    <form class="ui form">
+                      <div class="field">
+                        <label style="color: white; text-align: left"><h4>max. player count: ( Currently: <i>{{configEdit.maxPlayerBungee}}</i> )</h4></label>
+                        <input type="number" name="maxplayercountbungee" placeholder="Put the new player count here" [(ngModel)]="editMaxBungeePlayers" required>
+                      </div>
+                      <div class="field">
+                        <label style="color: white; text-align: left"><h4>Bungeecord MODT: ( Currently: <i>{{configEdit.motdBungee}}</i> )</h4></label>
+                        <input type="text" name="modtbungee" placeholder="Put the new player count here" [(ngModel)]="editBungeeMotd" required>
+                      </div>
+                      <button class="ui button" (click)="submitValues()">
+                        Submit / Save
+                      </button>
+                    </form>
+                    <br>
+                    <br>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="sixteen wide column centered" style="background: #3d3d3d; border-radius: 5px; padding: 10px">
+
+                    <div class="ui fluid grid centered">
+                      <div class="spaced"></div>
+
+                      <!-- START EDIT / NEW SERVERS -->
+                      <!-- HEADER EDITS -->
+                      <div class="row">
+                        <div class="sixteen wide column center aligned">
+                          <h1 style="text-align: center; color: white">EDITS / NEW SERVERS:</h1>
+                        </div>
+                      </div>
+                      <!-- CONTENT EDITS -->
+                      <!-- -> SHOW WHEN NOTHING IS THERE -->
+                      <div class="row" *ngIf="configEdit.editList.length === 0">
+                        <div class="fifteen wide column center aligned">
+                          <p style="text-align: center; color: white">There are no new servers or edits.</p>
+                        </div>
+                      </div>
+                      <!-- -> SHOW WHEN SOMETHING IS THERE -->
+                      <div class="row" *ngIf="configEdit.editList.length !== 0">
+                        <div class="fifteen wide column center aligned">
+                          <div class="ui fluid grid centered">
+                            <div class="row" *ngFor="let e of this.configEdit.editList">
+                              <div class="ui fluid grid centered" style="background: #434343; padding: 2px">
+
+                                <!-- START HEADER -->
+                                <div class="row">
+                                  <div class="fourteen wide column center aligned">
+                                    <p style="color: white">
+                                      <span class="action-background" *ngIf="e.editAction === editActionCreate" style="color: white">CREATE</span>
+                                      <span class="action-background" *ngIf="e.editAction === editActionModify" style="color: white">MODIFY</span>
+                                      <span class="action-background" *ngIf="e.editAction === editActionDelete" style="color: white">DELETE</span>
+                                      |
+                                      <span class="action-background" *ngIf="e.serverObject.active" style="color: green">ACTIVE</span>
+                                      <span class="action-background" *ngIf="!e.serverObject.active" style="color: red">INACTIVE</span>
+                                      <span *ngIf="e.editAction !== editActionCreate" style="color: white"> | Server-ID: <span class="action-background"
+                                                                                                                               style="font-weight: bold">#{{e.serverObject.serverId}}</span></span>
+                                    </p>
+                                  </div>
+                                </div>
+                                <!-- END HEADER -->
+
+                                <!-- START CONTENT (name / ip / port) -->
+
+                                <div class="row">
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Servername: <span class="action-background" style="font-weight: bold">{{e.serverObject.serverName}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">IP-Address: <span class="action-background" style="font-weight: bold">{{e.serverObject.ipAddress}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Serverport: <span class="action-background" style="font-weight: bold">{{e.serverObject.port}}</span></p>
+                                  </div>
+                                </div>
+
+                                <!-- END CONTENT (name / ip / port) -->
+
+                                <!-- START CONTENT (maxplayers / accesstype / lobby) -->
+
+                                <div class="row">
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Max. players: <span class="action-background" style="font-weight: bold">{{e.serverObject.maxPlayers}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Access Type: <span class="action-background" style="font-weight: bold">{{e.serverObject.accessType}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Lobby?:
+                                      <span class="action-background" style="font-weight: bold" *ngIf="e.isLobby">YES</span>
+                                      <span class="action-background" style="font-weight: bold" *ngIf="!e.isLobby">NO</span>
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <!-- END CONTENT (maxplayers / accesstype / lobby) -->
+
+                                <!-- START BUTTONS -->
+
+                                <div class="row">
+                                  <div class="ten wide column center aligned">
+                                    <div class="ui vertical animated button" tabindex="0" *ngIf="e.editAction !== editActionDelete">
+                                      <div class="hidden content">Edit</div>
+                                      <div class="visible content">
+                                        <i class="pencil alternate icon"></i>
+                                      </div>
+                                    </div>
+                                    <div class="ui vertical animated button" tabindex="0" *ngIf="e.editAction !== editActionDelete">
+                                      <div class="hidden content">Undo</div>
+                                      <div class="visible content">
+                                        <i class="trash icon"></i>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- END BUTTONS -->
+                              </div>
+                              <br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- END EDIT / NEW SERVERS -->
+                      <div class="spaced"></div>
+                      <!-- START LOBBIES -->
+
+                      <!-- START LOBBIES HEADER -->
+                      <div class="row">
+                        <div class="sixteen wide column center aligned">
+                          <h1 style="text-align: center; color: white">LOBBIES:</h1>
+                        </div>
+                      </div>
+                      <!-- END LOBBIES HEADER -->
+
+                      <!-- START NO LOBBIES THERE -->
+                      <div class="row" *ngIf="getValuesOfServerRecord(this.configUpload.lobbyMap).length === 0">
+                        <div class="fifteen wide column center aligned">
+                          <p style="color: red; text-align: center">There are no lobbies created in your ServerManager context!</p>
+                        </div>
+                      </div>
+                      <!-- END NO LOBBIES THERE -->
+                      <div class="row" *ngIf="getValuesOfServerRecord(this.configUpload.lobbyMap).length !== 0">
+                        <div class="fifteen wide column center aligned">
+                          <div class="ui fluid grid centered">
+                            <div class="row" *ngFor="let s of getValuesOfServerRecord(this.configUpload.lobbyMap)">
+                              <div class="ui fluid grid centered" style="background: #434343; padding: 2px" *ngIf="!containsEditId(s.serverId)">
+                                <div class="row">
+                                  <div class="fourteen wide column center aligned">
+                                    <span class="action-background" *ngIf="s.active" style="color: green">ACTIVE</span>
+                                    <span class="action-background" *ngIf="!s.active" style="color: red">INACTIVE</span>
+                                    |
+                                    <span style="color: white">Server-ID: <span class="action-background" style="color: white; font-weight: bold">#{{s.serverId}}</span></span>
+                                  </div>
+                                </div>
+                                <!-- START CONTENT (name / ip / port) -->
+
+                                <div class="row">
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Servername: <span class="action-background" style="font-weight: bold">{{s.serverName}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">IP-Address: <span class="action-background" style="font-weight: bold">{{s.ipAddress}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Serverport: <span class="action-background" style="font-weight: bold">{{s.port}}</span></p>
+                                  </div>
+                                </div>
+
+                                <!-- END CONTENT (name / ip / port) -->
+                                <!-- START CONTENT (maxplayers / accesstype / lobby) -->
+
+                                <div class="row">
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Max. players: <span class="action-background" style="font-weight: bold">{{s.maxPlayers}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Access Type: <span class="action-background" style="font-weight: bold">{{s.accessType}}</span></p>
+                                  </div>
+                                </div>
+
+                                <!-- END CONTENT (maxplayers / accesstype / lobby) -->
+                                <!-- START BUTTONS -->
+                                <div class="row">
+                                  <div class="ten wide column center aligned">
+                                    <div class="ui vertical animated button" tabindex="0">
+                                      <div class="hidden content">Edit</div>
+                                      <div class="visible content">
+                                        <i class="pencil alternate icon"></i>
+                                      </div>
+                                    </div>
+                                    <div class="ui vertical animated button" tabindex="0">
+                                      <div class="hidden content">Delete</div>
+                                      <div class="visible content">
+                                        <i class="trash icon"></i>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- END BUTTONS -->
+                              </div>
+                              <br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <!-- END LOBBIES -->
+                      <div class="spaced"></div>
+                      <!-- START NON-LOBBIES -->
+
+                      <!-- START NON-LOBBIES HEADER -->
+                      <div class="row">
+                        <div class="sixteen wide column center aligned">
+                          <h1 style="text-align: center; color: white">NON-LOBBIES:</h1>
+                        </div>
+                      </div>
+                      <!-- END NON-LOBBIES HEADER -->
+
+                      <!-- START NO NON-LOBBIES THERE -->
+                      <div class="row" *ngIf="getValuesOfServerRecord(this.configUpload.nonLobbiesMap).length === 0">
+                        <div class="fifteen wide column center aligned">
+                          <p style="color: red; text-align: center">There are no non-lobbies created in your ServerManager context!</p>
+                        </div>
+                      </div>
+                      <!-- END NO NON-LOBBIES THERE -->
+                      <div class="row" *ngIf="getValuesOfServerRecord(this.configUpload.nonLobbiesMap).length !== 0">
+                        <div class="fifteen wide column center aligned">
+                          <div class="ui fluid grid centered">
+                            <div class="row" *ngFor="let s of getValuesOfServerRecord(this.configUpload.nonLobbiesMap)">
+                              <div class="ui fluid grid centered" style="background: #434343; padding: 2px" *ngIf="!containsEditId(s.serverId)">
+                                <div class="row">
+                                  <div class="fourteen wide column center aligned">
+                                    <span class="action-background" *ngIf="s.active" style="color: green">ACTIVE</span>
+                                    <span class="action-background" *ngIf="!s.active" style="color: red">INACTIVE</span>
+                                    |
+                                    <span style="color: white">Server-ID: <span class="action-background" style="color: white; font-weight: bold">#{{s.serverId}}</span></span>
+                                  </div>
+                                </div>
+                                <!-- START CONTENT (name / ip / port) -->
+
+                                <div class="row">
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Servername: <span class="action-background" style="font-weight: bold">{{s.serverName}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">IP-Address: <span class="action-background" style="font-weight: bold">{{s.ipAddress}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Serverport: <span class="action-background" style="font-weight: bold">{{s.port}}</span></p>
+                                  </div>
+                                </div>
+
+                                <!-- END CONTENT (name / ip / port) -->
+                                <!-- START CONTENT (maxplayers / accesstype / lobby) -->
+
+                                <div class="row">
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Max. players: <span class="action-background" style="font-weight: bold">{{s.maxPlayers}}</span></p>
+                                  </div>
+                                  <div class="five wide column center aligned">
+                                    <p style="color: white; text-align: center">Access Type: <span class="action-background" style="font-weight: bold">{{s.accessType}}</span></p>
+                                  </div>
+                                </div>
+
+                                <!-- END CONTENT (maxplayers / accesstype) -->
+                                <!-- START BUTTONS -->
+                                <div class="row">
+                                  <div class="ten wide column center aligned">
+                                    <div class="ui vertical animated button" tabindex="0">
+                                      <div class="hidden content">Edit</div>
+                                      <div class="visible content">
+                                        <i class="pencil alternate icon"></i>
+                                      </div>
+                                    </div>
+                                    <div class="ui vertical animated button" tabindex="0">
+                                      <div class="hidden content">Delete</div>
+                                      <div class="visible content">
+                                        <i class="trash icon"></i>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- END BUTTONS -->
+                              </div>
+                              <br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <!-- END NON-LOBBIES -->
+
+
+                    </div>
+                    <br>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- new servers here -->
+            <div class="eight wide column centered" style="background: green">
+              <div class="ui fluid centered grid">
+                <div class="row">
+                  <div class="sixteen wide column centered" style="background: #3d3d3d; border-radius: 5px">
+                    <h1 style="font-size: x-large; color: white; text-align: center">Editing</h1>
+                    <p style="color: white; text-align: center">Here you can edit all your servers and create new ones. <br> See more information on: <a class="link-footer">TBA</a></p>
+                    <p style="text-align: center">
+                      <button class="ui button success" (click)="startNewServerCreate()">
+                        Create new server
+                      </button>
+                    </p>
+                    <!-- background for servers table -->
+                    <div class="ui fluid centered grid">
+                      <div class="row">
+                        <div class="fifteen wide column centered" style="background: #2d2d2d; border-radius: 3px">
+                          <div *ngIf="currentEdit != null">
+                            <div class="ui fluid centered grid">
+                              <div class="row">
+                                <div class="ten wide column center aligned">
+                                  <span style="color: white" *ngIf="currentAction == editActionCreate"> You're about to create a new server!</span>
+                                  <span style="color: white" *ngIf="currentAction == editActionModify"> You're about to modify an existing server!</span>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="sixteen wide column center aligned">
+                                  <form class="ui form">
+                                    <div class="ui fluid grid centered">
+                                      <div class="row">
+                                        <div class="eight wide column left aligned">
+                                          <p style="color: white">Server-ID: <span style="font-weight: bold">{{currentEdit.serverObject.serverId}}</span></p>
+                                        </div>
+                                        <div class="eight wide column left aligned">
+                                          <div class="field">
+                                            <label style="color: white;">Server name:</label>
+                                            <input type="text" name="server-name" placeholder="Server name" [(ngModel)]="currentEdit.serverObject.serverName" required>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="eight wide column left aligned">
+                                          <div class="field">
+                                            <label style="color: white;">Server IP:</label>
+                                            <input type="text" name="server-ip" placeholder="Server IP" [(ngModel)]="currentEdit.serverObject.ipAddress" required>
+                                          </div>
+                                        </div>
+                                        <div class="eight wide column left aligned">
+                                          <div class="field">
+                                            <label style="color: white;">Server Port:</label>
+                                            <input type="number" name="server-port" placeholder="Server port" [(ngModel)]="currentEdit.serverObject.port" required>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="eight wide column left aligned">
+                                          <div class="field">
+                                            <label style="color: white;">Access Type:</label>
+                                            <input type="text" name="server-access" placeholder="Server IP" [(ngModel)]="currentEdit.serverObject.accessType" required>
+                                          </div>
+                                        </div>
+                                        <div class="eight wide column left aligned">
+                                          <div class="field">
+                                            <label style="color: white;">Max-Players:</label>
+                                            <input type="number" name="maxplayers" placeholder="Max-Players" [(ngModel)]="currentEdit.serverObject.maxPlayers" required>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="seven wide column center aligned">
+                                        <div class="field">
+                                          <label style="color: white;">Active:</label>
+                                          <input type="checkbox" name="isactive" [(ngModel)]="currentEdit.serverObject.active" required>
+                                        </div>
+                                      </div>
+                                      <div class="seven wide column center aligned">
+                                        <div class="field" *ngIf="currentEdit.editAction === editActionCreate">
+                                          <label style="color: white;">Lobby?:</label>
+                                          <input type="checkbox" name="islobby" [(ngModel)]="currentEdit.isLobby" required>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="seven wide column center aligned">
+                                        <button class="ui button success" (click)="saveChanges()">
+                                          Save changes
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
