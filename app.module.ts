@@ -18,6 +18,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
+import { TutorialsComponent } from './tutorials/tutorials.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {ToastrModule} from 'ngx-toastr';
     GettingStartedComponent,
     StatisticshelpComponent,
     HelpComponent,
-    FeatureListComponent
+    FeatureListComponent,
+    TutorialsComponent
   ],
   imports: [
     BrowserModule,

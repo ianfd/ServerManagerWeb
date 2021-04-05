@@ -211,13 +211,13 @@
 
                                 <div class="row">
                                   <div class="ten wide column center aligned">
-                                    <div class="ui vertical animated button" tabindex="0" *ngIf="e.editAction !== editActionDelete">
+                                    <div class="ui vertical animated button" tabindex="0" *ngIf="e.editAction !== editActionDelete" (click)="startEditingEdit(e.serverObject.serverName)">
                                       <div class="hidden content">Edit</div>
                                       <div class="visible content">
                                         <i class="pencil alternate icon"></i>
                                       </div>
                                     </div>
-                                    <div class="ui vertical animated button" tabindex="0" *ngIf="e.editAction !== editActionDelete">
+                                    <div class="ui vertical animated button" tabindex="0" *ngIf="e.editAction !== editActionDelete" (click)="removeFromEditList(e.serverObject.serverName)">
                                       <div class="hidden content">Undo</div>
                                       <div class="visible content">
                                         <i class="trash icon"></i>
@@ -295,7 +295,7 @@
                                 <!-- START BUTTONS -->
                                 <div class="row">
                                   <div class="ten wide column center aligned">
-                                    <div class="ui vertical animated button" tabindex="0">
+                                    <div class="ui vertical animated button" tabindex="0" (click)="startExistingServerEdit(s)">
                                       <div class="hidden content">Edit</div>
                                       <div class="visible content">
                                         <i class="pencil alternate icon"></i>
@@ -380,7 +380,7 @@
                                 <!-- START BUTTONS -->
                                 <div class="row">
                                   <div class="ten wide column center aligned">
-                                    <div class="ui vertical animated button" tabindex="0">
+                                    <div class="ui vertical animated button" tabindex="0" (click)="startExistingServerEdit(s)">
                                       <div class="hidden content">Edit</div>
                                       <div class="visible content">
                                         <i class="pencil alternate icon"></i>

@@ -67,7 +67,7 @@ export class EditorComponent implements OnInit {
     console.log('key -> ' + this.key + ' / secret -> ' + this.secret);
     if ((this.key != null) && (this.secret != null) && (!((typeof this.key === 'undefined') || (typeof this.secret === 'undefined')))) {
       console.log('checking true');
-      this.downloadExistingEdit(this.key, this.secret);
+      this.downloadConfig(this.key, this.secret);
     }
   }
 
@@ -242,10 +242,6 @@ export class EditorComponent implements OnInit {
       this.errorTitle = 'No key and secret';
       this.errorText = 'You have to provide key and secret to authenticate.';
     }
-  }
-
-  uploadConfigEdit(configEdit: ConfigEdit): void {
-    // this.configUpload.lobbyMap.
   }
 
   hideError(): void {
@@ -481,6 +477,15 @@ export class EditorComponent implements OnInit {
       }
     });
     this.configEdit.editList = newList;
+  }
+
+  deleteServer(s: ServerObject): void {
+    if (!this.containsEditId(s.serverId)) {
+      this.configEdit.editList.push(new ServerEdit(EditAction.DELETE, s, this.isLobby(s.serverName)));
+      this.tservice.success('You have successfully deleted the server.o', 'Deletion successful');
+    } else {
+      this.tservice.error('There is already an existing edit.', 'Deletion failed');
+    }
   }
 
   // get Object from the maps
