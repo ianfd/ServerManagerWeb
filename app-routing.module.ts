@@ -7,6 +7,9 @@ import {GettingStartedComponent} from './getting-started/getting-started.compone
 import {StatisticshelpComponent} from './help/statisticshelp/statisticshelp.component';
 import {HelpComponent} from './help/help.component';
 import {TutorialsComponent} from './tutorials/tutorials.component';
+import {MysqlComponent} from './tuts/install/mysql/mysql.component';
+import {PluginComponent} from './tuts/install/plugin/plugin.component';
+import {FirstServerComponent} from './tuts/first-server/first-server.component';
 
 const routes: Routes = [
   {path: '', component: HomepageComponent},
@@ -15,7 +18,10 @@ const routes: Routes = [
   {path: 'getstarted', component: GettingStartedComponent},
   {path: 'help/stats', component: StatisticshelpComponent},
   {path: 'help', component: HelpComponent},
-  {path: 'tutorials', component: TutorialsComponent}
+  {path: 'tutorials', component: TutorialsComponent},
+  {path: 'tutorials/install/mysql', component: MysqlComponent},
+  {path: 'tutorials/install/plugin', component: PluginComponent},
+  {path: 'tutorials/first-server', component: FirstServerComponent}
 ];
 
 @NgModule({

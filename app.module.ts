@@ -19,6 +19,10 @@ import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 import { TutorialsComponent } from './tutorials/tutorials.component';
+import { MysqlComponent } from './tuts/install/mysql/mysql.component';
+import { RedisComponent } from './tuts/install/redis/redis.component';
+import { PluginComponent } from './tuts/install/plugin/plugin.component';
+import { FirstServerComponent } from './tuts/first-server/first-server.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,11 @@ import { TutorialsComponent } from './tutorials/tutorials.component';
     StatisticshelpComponent,
     HelpComponent,
     FeatureListComponent,
-    TutorialsComponent
+    TutorialsComponent,
+    MysqlComponent,
+    RedisComponent,
+    PluginComponent,
+    FirstServerComponent
   ],
   imports: [
     BrowserModule,

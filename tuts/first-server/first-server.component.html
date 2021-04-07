@@ -1,0 +1,73 @@
+<body style="background: #1B1C1D; padding-top: 70px; padding-bottom: 50px">
+<div class="ui container fluid" style="padding-bottom: 50px">
+  <div class="ui fluid centered grid" style="padding-top: 20px">
+    <div class="row">
+      <div class="five wide column center aligned">
+        <h1 style="color: white">TUTORIALS</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="eight wide column center aligned">
+        <div class="ui fluid centered grid">
+          <div class="row">
+            <div class="fifteen wide column left aligned" style="background-color: #4d4d4d; border-radius: 7px; padding: 5px">
+              <p style="color: white; font-size: xx-large; text-align: center">Install the plugin</p>
+              <div class="ui segment inverted" style="background: transparent">
+                <p style="font-size: large">So, first, when you already have some servers configured in the <span class="action-background" style="font-weight: bold">config.yml</span> of your BungeeCord server, they will
+                  be existing, even when
+                  you
+                  have the ServerManager plugin installed.</p>
+                <p style="font-size: large">But, I recommend that you setup at least one lobby through the ServerManager plugin, so you can make sure the <span class="action-background" style="font-weight: bold">forceToLobby</span>
+                  setting
+                  works and you can use the load balancing feature of the plugin.</p>
+                <p style="font-size: large">You can also remove all servers from the <span class="action-background" style="font-weight: bold">config.yml</span> of your BungeeCord server. The servers you add through
+                  ServerManager will appear
+                  as the normal servers.</p>
+                <p style="font-size: large">The easiest way to install you first server is if you already have a server installed on your BungeeCord server, join the network and execute the following command:</p>
+                <p style="font-size: large"><code>/sm create [servername] [ip-address] [port] [access level] [lobby true / false]</code><br>
+                  Explanation:</p>
+                <div class="ui bulleted list">
+                  <div class="item" style="font-size: large">[servername]: The name your new server's going to have.</div>
+                  <div class="item" style="font-size: large">[ip-address]: The IP-Address of your new server.</div>
+                  <div class="item" style="font-size: large">[port]: The port of your new server.</div>
+                  <div class="item" style="font-size: large">[access level]: You can choose an access level for your server, if you choose <span class="action-background">all</span>, every player is able to join.</div>
+                  <div class="item" style="font-size: large">[lobby]: You can set this value to <span class="action-background">true</span> or <span class="action-background">false</span>, it sets, whether this server is
+                    going to be a lobby
+                    or a non-lobby server.
+                  </div>
+                </div>
+                <p style="font-size: large">By default, the maximum amount of players, that can join a server is at <span class="action-background">20 players</span>.<br>You can change that with that command:</p>
+                <p style="font-size: large"><code>/sm setmaxplayer [servername] [new amount of players]</code><br>Explanation:</p>
+                <div class="ui bulleted list">
+                  <div class="item" style="font-size: large">[servername]: The name of the server you want to edit.</div>
+                  <div class="item" style="font-size: large">[amount of players]: The name of the server you want to edit.</div>
+                </div>
+                <p style="font-size: x-large">Hints:</p>
+                <div class="ui segment inverted" style="background: transparent">
+                  <p style="font-size: large"><span style="font-weight: bold">First:</span> You have to have at least one lobby registered via the ServerManager plugin and this lobby.
+                    If there is only one lobby, it should have the access level <span class="action-background">all</span>.</p>
+                  <p style="font-size: large"><span style="font-weight: bold">Second:</span> All players that don't have a lobby to join on are going to be kicked. This includes new players that don't have the access to
+                    join a lobby.</p>
+                  <p style="font-size: large"><span style="font-weight: bold">Third:</span> If you want to use the WebEditing feature of the plugin, read that first: <a class="link-footer" routerLink="">Beam me there</a>
+                  </p>
+                </div>
+                <p style="text-align: center"><a class="ui green button" routerLink="/tutorials">Go back</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+<!--
+ <p>So, first, when you already have some servers configured in the <span class="action-background" style="font-weight: bold">config.yml</span> of your BungeeCord server. They will be also available, when
+                    you've installed all the ServerManager plugin.</p>
+                  <p>But, I recommend that you setup at least one lobby through the ServerManager plugin, so you can make sure the <span class="action-background" style="font-weight: bold">forceToLobby</span> setting works.</p>
+                  <p>You can also remove all servers from the <span class="action-background" style="font-weight: bold">config.yml</span> of your BungeeCord server. The servers you add through ServerManager will appear as the
+                  default servers.</p>
+                  <p>Y</p>
+
+ -->

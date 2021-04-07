@@ -1,0 +1,61 @@
+<body style="background: #1B1C1D; padding-top: 70px; padding-bottom: 50px">
+<div class="ui container fluid" style="padding-bottom: 50px">
+  <div class="ui fluid centered grid" style="padding-top: 20px">
+    <div class="row">
+      <div class="five wide column center aligned">
+        <h1 style="color: white">TUTORIALS</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="eight wide column center aligned">
+        <div class="ui fluid centered grid">
+          <div class="row">
+            <div class="fifteen wide column left aligned" style="background-color: #4d4d4d; border-radius: 7px; padding: 5px">
+              <p style="color: white; font-size: xx-large; text-align: center">Install the plugin</p>
+              <br>
+              <div class="ui segment inverted" style="background: transparent">
+                <p style="font-size: x-large">1. Step - Download the file:</p>
+                <div class="ui segment inverted" style="background: transparent">
+                  <p style="font-size: large">Download the latest version of the ServerManager. You can to this either from the <a target="_blank" class="link-footer">SPIGOT WEBSITE</a> or directly from me:
+                    <a class="link-footer" target="_blank" href="https://nexus.ianfd.de/de/craftedcrime/bungee/servermanager/servermanager/1.0/servermanager-1.0.jar">TBA</a></p>
+                </div>
+                <p style="font-size: x-large">2. Step - Move into the plugins folder:</p>
+                <div class="ui segment inverted" style="background: transparent">
+                  <p style="font-size: large">Drag the downloaded file into the <span class="action-background" style="font-weight: bold">plugins folder</span> of your BungeeCord server.
+                    Make sure that you delete all older versions of the plugin that are in the plugins folder.</p>
+                </div>
+                <p style="font-size: x-large">3. Step - Configure your plugin:</p>
+                <div class="ui segment inverted" style="background: transparent">
+                  <p style="font-size: large"><u>Setup MySQL / MariaDB:</u></p>
+                  <p style="font-size: large">If you don't already have a MySQL or MariaDB database, you will have to create one. <a class="link-footer" target="_blank" routerLink="/tutorials/install/mysql">Install MySQL</a></p>
+                  <p style="font-size: large">Before you can edit the <span class="action-background" style="font-weight: bold">plugins/ServerManager/config.yml</span> you have to start the BungeeCord server one time, so that the config file is
+                    generated.</p>
+                  <p style="font-size: large">It's also good if you have the credentials of the mysql user, you want to use, ready. </p>
+                  <p style="font-size: large">After this file has been generated you have to open it. If you are on debian/ubuntu use nano or vim to open the config file of ServerManager. If you are on windows/mac, you can use the default
+                    text-editor.</p>
+                  <p style="font-size: large">After that you will see some variables you can edit. The fields you have to edit to get the ServerManager working, are the settings for MySQL.<br>
+                  You can find the MySQL settings at the line: 11, 13, 15, 17 and 19.</p>
+                  <p style="font-size: large">The rest of the settings can be changed by you!</p>
+                  <p style="font-size: large">After saving the file and a restart, the plugin is ready to be used.</p>
+                  <p style="font-size: large">Have a look at <a class="link-footer" routerLink="/tutorials/first-server">create your first server</a> to find out more!</p>
+                  <p style="text-align: center"><a class="ui green button" routerLink="/tutorials">Go back</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+<!--
+ <p>So, first, when you already have some servers configured in the <span class="action-background" style="font-weight: bold">config.yml</span> of your BungeeCord server. They will be also available, when
+                    you've installed all the ServerManager plugin.</p>
+                  <p>But, I recommend that you setup at least one lobby through the ServerManager plugin, so you can make sure the <span class="action-background" style="font-weight: bold">forceToLobby</span> setting works.</p>
+                  <p>You can also remove all servers from the <span class="action-background" style="font-weight: bold">config.yml</span> of your BungeeCord server. The servers you add through ServerManager will appear as the
+                  default servers.</p>
+                  <p>Y</p>
+
+ -->
