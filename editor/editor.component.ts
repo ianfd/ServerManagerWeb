@@ -35,6 +35,8 @@ export class EditorComponent implements OnInit {
   editActionCreate: EditAction = EditAction.CREATE;
   editActionDelete: EditAction = EditAction.DELETE;
   editActionModify: EditAction = EditAction.EDIT;
+  editfalse = false;
+  editrue = true;
 
   // edit values
   nameEditStart: string;
@@ -51,6 +53,7 @@ export class EditorComponent implements OnInit {
   // last saved
   lastSaved: string;
   lastSaveTime: number;
+
 
   constructor(private activatedRoute: ActivatedRoute,
               private httpClient: HttpService,
@@ -347,30 +350,33 @@ export class EditorComponent implements OnInit {
 
   containsEdit(name: string): boolean {
     let re = false;
-    this.configEdit.editList.forEach(value => {
+    for (const value of this.configEdit.editList) {
       if (value.serverObject.serverName.toLowerCase() === name.toLowerCase()) {
         re = true;
       }
-    });
+    }
     return re;
   }
 
-  containsEditId(id: number): boolean {
-    this.configEdit.editList.forEach(value => {
-      if (value.serverObject.serverId === id) {
+  containsEditId(id: number, isLobbi: boolean): boolean {
+    for (const s of this.configEdit.editList) {
+      console.log('checking server:' + s.serverObject.serverId + ' | against ' + id + ' | is Lobby? ' + isLobbi + ' |orig is lobby ? ' + s.lobby);
+      if ((s.serverObject.serverId === id) && (s.lobby === isLobbi)) {
+        console.log('true');
         return true;
       }
-    });
+    }
     return false;
   }
 
-  isLobby(name: string) {
-    this.getValuesOfServerRecord(this.configUpload.lobbyMap).forEach(value => {
-      if (name.toLowerCase() === value.serverName.toLowerCase()) {
-        return true;
+  isLobbyhihi(id: number) {
+    let ret = false;
+    for (const value of this.getValuesOfServerRecord(this.configUpload.lobbyMap)) {
+      if (id === value.serverId) {
+        ret = ret || true;
       }
-    });
-    return false;
+    }
+    return ret;
   }
 
   // ---------------------------- START EDITING STUFF ----------------------------
@@ -383,7 +389,8 @@ export class EditorComponent implements OnInit {
       this.currentAction = EditAction.EDIT;
       this.nameEditStart = server.serverName;
       this.currentEdit = new ServerEdit(EditAction.EDIT, new ServerObject(server.serverId, server.serverName, server.ipAddress, server.port,
-        server.accessType, server.maxPlayers, server.active), this.isLobby(server.serverName));
+        server.accessType, server.maxPlayers, server.active), this.isLobbyhihi(server.serverId));
+      console.log('created object: ' + this.currentEdit.lobby);
     } else {
       this.tservice.error('Sorry, but this server is already edited.', 'Editing failed');
     }
@@ -471,17 +478,18 @@ export class EditorComponent implements OnInit {
   removeFromEditList(name: string) {
     const copy = cloneDeep(this.configEdit.editList);
     const newList = Array<ServerEdit>();
-    copy.forEach(value => {
+    for (const value of copy) {
       if (value.serverObject.serverName.toLowerCase() !== name.toLowerCase()) {
         newList.push(value);
       }
-    });
+    }
+
     this.configEdit.editList = newList;
   }
 
-  deleteServer(s: ServerObject): void {
-    if (!this.containsEditId(s.serverId)) {
-      this.configEdit.editList.push(new ServerEdit(EditAction.DELETE, s, this.isLobby(s.serverName)));
+  deleteServer(s: ServerObject, isLobbi: boolean): void {
+    if (!this.containsEditId(s.serverId, isLobbi)) {
+      this.configEdit.editList.push(new ServerEdit(EditAction.DELETE, s, this.isLobbyhihi(s.serverId)));
       this.tservice.success('You have successfully deleted the server.o', 'Deletion successful');
     } else {
       this.tservice.error('There is already an existing edit.', 'Deletion failed');

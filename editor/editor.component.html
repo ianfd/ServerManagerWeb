@@ -72,9 +72,9 @@
         <div class="ui fluid internally celled grid centered">
           <div class="row">
             <div class="fourteen wide column">
-              <p style="color: white; text-align: center" *ngIf="lastSaveTime != null">Save the edit to yyour ServerManager instance.<br>
+              <p style="color: white; text-align: center" *ngIf="lastSaveTime != null">Save the edit to your ServerManager instance.<br>
                 Execute this command on your bungecord server:<br>
-                <code>/sm websave {{key}} {{secret}}</code></p>
+                <code>/sm save {{key}} {{secret}}</code></p>
               <p style="color: white; text-align: center" *ngIf="lastSaveTime == null">You haven't saved your edit yet.<br>Save your edit to transfer it to your server.</p>
             </div>
             <div class="two wide column center aligned">
@@ -98,7 +98,7 @@
           <div class="spacer"></div>
           <div class="row">
             <!-- row with general information MOTD and playercount-->
-            <div class="six wide column centered" style="background: red; padding-bottom: 5px">
+            <div class="six wide column centered" style="background: transparent; padding-bottom: 5px">
               <div class="ui fluid centered grid">
                 <div class="row">
                   <div class="ten wide column centered" style="background: #3d3d3d; border-radius: 5px; padding-bottom: 10px">
@@ -113,11 +113,11 @@
                       </p></div>
                     <form class="ui form">
                       <div class="field">
-                        <label style="color: white; text-align: left"><h4>max. player count: ( Currently: <i>{{configEdit.maxPlayerBungee}}</i> )</h4></label>
+                        <label style="color: white; text-align: left"><h4>max. player count: ( Currently: <i>{{configEdit.maxPlayerBungee}}</i><span style="color: red">(currently not supported)</span> )</h4></label>
                         <input type="number" name="maxplayercountbungee" placeholder="Put the new player count here" [(ngModel)]="editMaxBungeePlayers" required>
                       </div>
                       <div class="field">
-                        <label style="color: white; text-align: left"><h4>Bungeecord MODT: ( Currently: <i>{{configEdit.motdBungee}}</i> )</h4></label>
+                        <label style="color: white; text-align: left"><h4>Bungeecord MODT: ( Currently: <i>{{configEdit.motdBungee}} <br>Colors with '&' are supported.</i> )</h4></label>
                         <input type="text" name="modtbungee" placeholder="Put the new player count here" [(ngModel)]="editBungeeMotd" required>
                       </div>
                       <button class="ui button" (click)="submitValues()">
@@ -199,8 +199,8 @@
                                   </div>
                                   <div class="five wide column center aligned">
                                     <p style="color: white; text-align: center">Lobby?:
-                                      <span class="action-background" style="font-weight: bold" *ngIf="e.isLobby">YES</span>
-                                      <span class="action-background" style="font-weight: bold" *ngIf="!e.isLobby">NO</span>
+                                      <span class="action-background" style="font-weight: bold" *ngIf="e.lobby">YES</span>
+                                      <span class="action-background" style="font-weight: bold" *ngIf="!e.lobby">NO</span>
                                     </p>
                                   </div>
                                 </div>
@@ -211,18 +211,12 @@
 
                                 <div class="row">
                                   <div class="ten wide column center aligned">
-                                    <div class="ui vertical animated button" tabindex="0" *ngIf="e.editAction !== editActionDelete" (click)="startEditingEdit(e.serverObject.serverName)">
-                                      <div class="hidden content">Edit</div>
-                                      <div class="visible content">
-                                        <i class="pencil alternate icon"></i>
-                                      </div>
-                                    </div>
-                                    <div class="ui vertical animated button" tabindex="0" *ngIf="e.editAction !== editActionDelete" (click)="removeFromEditList(e.serverObject.serverName)">
-                                      <div class="hidden content">Undo</div>
-                                      <div class="visible content">
-                                        <i class="trash icon"></i>
-                                      </div>
-                                    </div>
+                                    <button class="ui button success" (click)="startEditingEdit(e.serverObject.serverName)" *ngIf="e.editAction !== editActionDelete">
+                                      Edit
+                                    </button>
+                                    <button class="ui button success" (click)="removeFromEditList(e.serverObject.serverName)">
+                                      Delete
+                                    </button>
                                   </div>
                                 </div>
 
@@ -256,7 +250,7 @@
                         <div class="fifteen wide column center aligned">
                           <div class="ui fluid grid centered">
                             <div class="row" *ngFor="let s of getValuesOfServerRecord(this.configUpload.lobbyMap)">
-                              <div class="ui fluid grid centered" style="background: #434343; padding: 2px" *ngIf="!containsEditId(s.serverId)">
+                              <div class="ui fluid grid centered" style="background: #434343; padding: 2px" *ngIf="(!containsEditId(s.serverId, true))">
                                 <div class="row">
                                   <div class="fourteen wide column center aligned">
                                     <span class="action-background" *ngIf="s.active" style="color: green">ACTIVE</span>
@@ -295,18 +289,12 @@
                                 <!-- START BUTTONS -->
                                 <div class="row">
                                   <div class="ten wide column center aligned">
-                                    <div class="ui vertical animated button" tabindex="0" (click)="startExistingServerEdit(s)">
-                                      <div class="hidden content">Edit</div>
-                                      <div class="visible content">
-                                        <i class="pencil alternate icon"></i>
-                                      </div>
-                                    </div>
-                                    <div class="ui vertical animated button" tabindex="0">
-                                      <div class="hidden content">Delete</div>
-                                      <div class="visible content">
-                                        <i class="trash icon"></i>
-                                      </div>
-                                    </div>
+                                    <button class="ui button success" (click)="startExistingServerEdit(s)">
+                                      Edit
+                                    </button>
+                                    <button class="ui button success" (click)="deleteServer(s, editrue)">
+                                      Delete
+                                    </button>
                                   </div>
                                 </div>
                                 <!-- END BUTTONS -->
@@ -341,7 +329,7 @@
                         <div class="fifteen wide column center aligned">
                           <div class="ui fluid grid centered">
                             <div class="row" *ngFor="let s of getValuesOfServerRecord(this.configUpload.nonLobbiesMap)">
-                              <div class="ui fluid grid centered" style="background: #434343; padding: 2px" *ngIf="!containsEditId(s.serverId)">
+                              <div class="ui fluid grid centered" style="background: #434343; padding: 2px" *ngIf="(!containsEditId(s.serverId, false))">
                                 <div class="row">
                                   <div class="fourteen wide column center aligned">
                                     <span class="action-background" *ngIf="s.active" style="color: green">ACTIVE</span>
@@ -380,18 +368,12 @@
                                 <!-- START BUTTONS -->
                                 <div class="row">
                                   <div class="ten wide column center aligned">
-                                    <div class="ui vertical animated button" tabindex="0" (click)="startExistingServerEdit(s)">
-                                      <div class="hidden content">Edit</div>
-                                      <div class="visible content">
-                                        <i class="pencil alternate icon"></i>
-                                      </div>
-                                    </div>
-                                    <div class="ui vertical animated button" tabindex="0">
-                                      <div class="hidden content">Delete</div>
-                                      <div class="visible content">
-                                        <i class="trash icon"></i>
-                                      </div>
-                                    </div>
+                                    <button class="ui button success" (click)="startExistingServerEdit(s)">
+                                      Edit
+                                    </button>
+                                    <button class="ui button success" (click)="deleteServer(s, editfalse)">
+                                      Delete
+                                    </button>
                                   </div>
                                 </div>
                                 <!-- END BUTTONS -->
@@ -413,7 +395,7 @@
               </div>
             </div>
             <!-- new servers here -->
-            <div class="eight wide column centered" style="background: green">
+            <div class="eight wide column centered" style="background: transparent">
               <div class="ui fluid centered grid">
                 <div class="row">
                   <div class="sixteen wide column centered" style="background: #3d3d3d; border-radius: 5px">
@@ -490,7 +472,7 @@
                                       <div class="seven wide column center aligned">
                                         <div class="field" *ngIf="currentEdit.editAction === editActionCreate">
                                           <label style="color: white;">Lobby?:</label>
-                                          <input type="checkbox" name="islobby" [(ngModel)]="currentEdit.isLobby" required>
+                                          <input type="checkbox" name="islobby" [(ngModel)]="currentEdit.lobby" required>
                                         </div>
                                       </div>
                                     </div>

@@ -5,12 +5,12 @@ export class ServerEdit {
 
   editAction: EditAction;
   serverObject: ServerObject;
-  isLobby: boolean;
+  lobby: boolean;
 
 
   constructor(editAction: EditAction, serverObject: ServerObject, isLobby: boolean) {
     this.editAction = editAction;
     this.serverObject = serverObject;
-    this.isLobby = isLobby;
+    this.lobby = isLobby;
   }
 }
