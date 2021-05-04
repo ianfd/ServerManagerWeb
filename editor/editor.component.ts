@@ -321,21 +321,21 @@ export class EditorComponent implements OnInit {
   // ---------------------------- EXISTING STUFF ----------------------------
 
   checkIfNameExists(name: string): boolean {
-    this.configEdit.editList.forEach(value => {
+    for (const value of this.configEdit.editList) {
       if (value.serverObject.serverName.toLowerCase() === name.toLowerCase()) {
         return true;
       }
-    });
-    this.getValuesOfServerRecord(this.configUpload.lobbyMap).forEach(value => {
+    }
+    for (const value of this.getValuesOfServerRecord(this.configUpload.lobbyMap)) {
       if (value.serverName.toLowerCase() === name.toLowerCase()) {
         return true;
       }
-    });
-    this.getValuesOfServerRecord(this.configUpload.nonLobbiesMap).forEach(value => {
+    }
+    for (const value of this.getValuesOfServerRecord(this.configUpload.nonLobbiesMap)) {
       if (value.serverName.toLowerCase() === name.toLowerCase()) {
         return true;
       }
-    });
+    }
     return false;
   }
 
